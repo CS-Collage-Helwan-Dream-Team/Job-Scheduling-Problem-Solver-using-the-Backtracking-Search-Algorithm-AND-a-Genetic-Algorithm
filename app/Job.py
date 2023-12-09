@@ -1,12 +1,14 @@
 from app.config import MACHINE_CAPACITY
 
 class Job:
+    TOTAL_TIME=0
     def __init__(self, name, duration, prerequisites=None, resources=None, machine_number=None):
         self.name = name
         self.duration = duration
         self.prerequisites = prerequisites if prerequisites is not None else []
         self.resources = resources if resources is not None else []
         self.machine_number = machine_number
+        Job.TOTAL_TIME+=duration
 
     def is_capacity_exceeded(self):
         return self.duration > MACHINE_CAPACITY 
@@ -28,3 +30,6 @@ class Job:
             self.duration -= new_duration
             part_number += 1
         return divided_jobs if divided_jobs else None
+
+    
+    
