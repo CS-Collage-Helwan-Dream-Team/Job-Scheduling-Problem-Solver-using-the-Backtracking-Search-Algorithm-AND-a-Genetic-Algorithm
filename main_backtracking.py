@@ -16,5 +16,8 @@ for job in jobs:
         if divided_jobs:
             new_jobs.extend(divided_jobs)
 
-for job in new_jobs:
+#add new jobs to jobs list
+jobs.extend(new_jobs)
+
+for job in jobs:
     print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
