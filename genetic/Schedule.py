@@ -31,7 +31,16 @@ class Schedule:
     def assign_jobs_to_machines(jobs):
         schedule = []
         machine_finish_times = {machine_number: 0 for machine_number in set(job.machine_number for job in jobs)}
+    
+        #sort jobs by number of prerequisites
         jobs.sort(key=lambda x: len(x.prerequisites))
+        #split the jobs into two arrays, one with prerequisites and one without
+        jobs_with_prerequisites = [job for job in jobs if job.prerequisites]
+        jobs_without_prerequisites = [job for job in jobs if not job.prerequisites]
+        #sort jobs with prerequisites by prerequisite float number descending
+        jobs_with_prerequisites.sort(key=lambda x: float(x.prerequisites[0]))
+        #merge the two arrays
+        jobs =  jobs_without_prerequisites +jobs_with_prerequisites 
 
         result_schedule = []
 

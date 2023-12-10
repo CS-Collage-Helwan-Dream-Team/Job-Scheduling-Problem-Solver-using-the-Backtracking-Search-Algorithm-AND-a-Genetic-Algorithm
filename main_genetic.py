@@ -1,29 +1,28 @@
-from app.Job import Job
+from genetic.Job import Job
 from genetic.Schedule import Schedule
 from app.config import MACHINE_CAPACITY,NUM_MACHINES
 
+
+
+
+# Your existing code
 jobs = [
-    Job('A', 100),
-    Job('B', 7),
-    Job('C', 100, ['A'], "r0"),
-    Job('D', 4, ['C']),
-    Job('E', 31, ['B'], "r2"),
+    Job('1', 60,),
+    Job('2', 50,['1']),
+    Job('3', 4,['2'], "r1"),
 ]
+
 max_time = MACHINE_CAPACITY * NUM_MACHINES
-totla_job_time= Job.TOTAL_TIME
-if(max_time<totla_job_time):
-    print("Total time of jobs exceeded the aviliable ")
+total_job_time = Job.TOTAL_TIME
+if max_time < total_job_time:
+    print("Total time of jobs exceeded the available ")
 
-new_jobs = []
+Job.handle_split_dependencies(jobs)
+
+print("################### New Jobs: #####################")
 for job in jobs:
-    if job.is_capacity_exceeded():
-        divided_jobs = job.divide_job()
-        if divided_jobs:
-            new_jobs.extend(divided_jobs)
-
-jobs.extend(new_jobs)
-
-
+    print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
+print("###################  #####################")
 
 decoded_jobs = Schedule.decode_schedule(Schedule.generate_random_schedules_and_encoding(jobs)[0],jobs)
 
