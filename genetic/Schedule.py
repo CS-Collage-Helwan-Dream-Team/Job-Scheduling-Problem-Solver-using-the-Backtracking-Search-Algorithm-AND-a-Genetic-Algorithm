@@ -10,7 +10,8 @@ class Schedule:
             schedule = []
             for job in jobs:
                 if job.resources:
-                    machine = int(job.resources.replace("r", ""))
+                    machine = int(job.resources.replace("r", "")) 
+                    # FIXME: validate the resource number in our range in this example between 0 and 3
                     schedule.append(machine)
                 else:
                     schedule.append(random.randint(0, NUM_MACHINES - 1))
