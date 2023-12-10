@@ -1,7 +1,6 @@
 from DataModels.ScheduledJob import ScheduledJop
+
 class FullSchedule:
-    
-    # jobs = array of ScheduledJop
-    jobs= []
+    jobs= list[ScheduledJop]
     max_end_time = int
     

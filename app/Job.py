@@ -2,7 +2,7 @@ from app.config import MACHINE_CAPACITY
 
 class Job:
     TOTAL_TIME = 0
-    machine_number=0
+    machine_number=-1
     def __init__(self, name, duration, prerequisites=None, resources=None):
         self.name = name
         self.duration = duration
