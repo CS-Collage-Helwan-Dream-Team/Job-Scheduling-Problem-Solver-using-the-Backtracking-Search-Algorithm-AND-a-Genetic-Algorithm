@@ -1,0 +1,23 @@
+assign_jobs_to_machines(schedule=55757){
+    set fitness for each encode
+    return object table
+}
+
+
+schedule = {
+    {encode='55757',fitness='50'},
+    {encode='45757',fitness=''},
+    {encode='24258',fitness=''},
+}
+
+
+for each schedule(){
+    object = assign_jobs_to_machines(schedule[i].encode)
+    //calc fitness
+    fitness=50
+    schedule[i].fitness=//calc fitness
+}
+schedule = {
+    {encode='2354584',fitness='80'},
+   
+}
