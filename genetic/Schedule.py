@@ -43,6 +43,7 @@ class Schedule:
         jobs =  jobs_without_prerequisites +jobs_with_prerequisites 
 
         result_schedule = []
+        
 
         for job in jobs:
             start_time = max(machine_finish_times[job.machine_number], Schedule.get_prerequisite_finish_time(job, schedule))
@@ -50,6 +51,7 @@ class Schedule:
             schedule.append((job.name, job.machine_number, start_time, end_time))
             machine_finish_times[job.machine_number] = end_time
             result_schedule.append({"name":job.name, "machine_number":job.machine_number, "start_time":start_time, "end_time":end_time})
+            
             # result_schedule.append(f"Job: {job.name}, Machine: {job.machine_number}, Start Time: {start_time}, End Time: {end_time}")
 
         return result_schedule
