@@ -1,4 +1,4 @@
-from genetic.Job import Job
+from app.Job import Job
 from genetic.Schedule import Schedule
 from app.config import MACHINE_CAPACITY,NUM_MACHINES
 

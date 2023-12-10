@@ -1,4 +1,4 @@
-from genetic.Job import Job
+from app.Job import Job
 from genetic.Schedule import Schedule
 from app.config import MACHINE_CAPACITY,NUM_MACHINES
 
@@ -13,7 +13,7 @@ max_time = MACHINE_CAPACITY * NUM_MACHINES
 total_job_time = Job.TOTAL_TIME
 if max_time < total_job_time:
     print("Total time of jobs exceeded the available ")
-    
+
 # دي اللي بتظبط الجوبات
 Job.handle_split_dependencies(jobs)
 
