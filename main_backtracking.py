@@ -20,9 +20,8 @@ Job.handle_split_dependencies(jobs)
 
 # دا عرض مطبوع
 print("################### New Jobs: #####################")
-for job in jobs:
-    print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
-
+# for job in jobs:
+#     print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
 # هتكمل بال (jobs)
 backtracking_algorithm = BacktrackingAlgorithm(jobs)
 backtracking_algorithm.solve()

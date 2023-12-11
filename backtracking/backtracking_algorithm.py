@@ -8,6 +8,7 @@ class BacktrackingAlgorithm:
     def is_valid_schedule(self, schedule):
         # resource_occupancy = {resource.resource_id: 0 for resource in self.problem_instance.resources}
 
+        self.print_schedule(schedule)
         for job, resource_id in schedule:
             # Check Resource Capacity
             # if resource_occupancy[resource.resource_id] + job.processing_time > resource.capacity:
@@ -45,8 +46,11 @@ class BacktrackingAlgorithm:
     def solve(self):
         initial_schedule = []
         remaining_jobs = self.jobs.copy()
-
         self.backtrack(initial_schedule, remaining_jobs)
+        if self.best_schedule:
+            self.print_schedule(self.best_schedule)
+        else:
+            print("No valid schedule found.")
 
         # if self.best_schedule:
         #     self.display_schedule()
@@ -55,15 +59,14 @@ class BacktrackingAlgorithm:
 
     # def display_schedule(self):
     #     print("Optimal Schedule:")
-    #     resource_occupancy = {resource.resource_id: 0 for resource in self.problem_instance.resources}
-    #     job_start_times = {job.job_id: 0 for job in self.problem_instance.jobs}
+    #     job_start_times = {job.name: 0 for job in self.jobs}
 
     #     for assignment in self.best_schedule:
     #         job = assignment[0]
     #         resource = assignment[1]
 
     #         # Calculate the start time considering dependencies
-    #         dependency_start_time = job_start_times[job.dependency] if job.dependency is not None else 0
+    #         dependency_start_time = job_start_times[job.prerequisites] if job.prerequisites is not None else 0
     #         start_time = max(resource_occupancy[resource.resource_id], dependency_start_time)
 
     #         end_time = start_time + job.processing_time
@@ -74,6 +77,11 @@ class BacktrackingAlgorithm:
     #         # Update Resource Occupancy and Job Start Times
     #         resource_occupancy[resource.resource_id] = end_time
     #         job_start_times[job.job_id] = end_time
+    def print_schedule(self, schedule):
+        for job, machine_number in schedule:
+            start_time = sum(j.duration for j, m in schedule if m == machine_number)
+            end_time = start_time + job.duration
+            print(f"Name: {job.name}, Machine Number: {machine_number}, Start Time: {start_time}, End Time: {end_time}")
 
 
 
