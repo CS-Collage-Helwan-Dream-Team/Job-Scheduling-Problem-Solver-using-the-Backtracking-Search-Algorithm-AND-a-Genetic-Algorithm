@@ -1,12 +1,12 @@
 from app.Job import Job
 from genetic.Schedule import Schedule
-from app.config import MACHINE_CAPACITY,NUM_MACHINES,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_RATE
-import random
+from app.config import MACHINE_CAPACITY,NUM_MACHINES,MAX_GENERATIONS,POPULATION_SIZE
 
 def calc_fitness(full_schedules):
     #calculate fitness for each schedule
     for full_schedule in full_schedules:
         full_schedule.fitness = Schedule.calculate_max_end_time(Schedule.assign_jobs_to_machines(full_schedule,jobs))
+    full_schedules.sort(key=lambda x: x.fitness)
     
 
 # Your existing code
@@ -21,7 +21,7 @@ jobs = [
     Job('8', 16),
     Job('9', 1),
     Job('10', 23),
-    Job('11', 17),
+    Job('11', 60,['4'], "r2"),
     Job('12', 7),
     Job('13', 3),
 ]
@@ -29,7 +29,7 @@ jobs = [
 max_time = MACHINE_CAPACITY * NUM_MACHINES
 total_job_time = Job.TOTAL_TIME
 if max_time < total_job_time:
-    print("Total time of jobs exceeded the available ")
+    print("Total time of jobs exceeded the available")
 
 Job.handle_split_dependencies(jobs)
 
@@ -38,12 +38,6 @@ for job in jobs:
     print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
 print("###################  #####################")
 
-
-
-
-# result_schedule = Schedule.assign_jobs_to_machines(full_schedules[0],jobs)
-# for item in result_schedule:
-#     print(item)
 
 best_schedules_after_crossove=[]
 population = Schedule.generate_random_schedules_and_encoding(jobs)
@@ -56,7 +50,7 @@ for i in range (MAX_GENERATIONS):
         #select best schedules
         best_schedules = population[:int(POPULATION_SIZE/2)]
         #crossover
-        best_schedules_after_crossover = Schedule.crossovers(best_schedules)
+        best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
     else:
         #calculate fitness for each schedule
         calc_fitness(best_schedules_after_crossover)
@@ -65,15 +59,38 @@ for i in range (MAX_GENERATIONS):
         #select best schedules
         best_schedules = best_schedules_after_crossover[:int(POPULATION_SIZE/2)]
         #crossover
-        best_schedules_after_crossover = Schedule.crossovers(best_schedules)
+        best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
     
 
-#print the best schedule after crossover
-print("################### Schedule: #####################")
-for item in population:
-    print('fitness: ',item.fitness, 'schedule: ',item.encode)
+
 #print the best schedule after crossover
 print("################### Best Schedule: #####################")
 calc_fitness(best_schedules_after_crossover)
-for item in best_schedules_after_crossover:
-    print('fitness: ',item.fitness, 'schedule: ',item.encode)
+best_schedule=best_schedules_after_crossover[0]
+best_schedule_decoded=Schedule.assign_jobs_to_machines(best_schedules_after_crossover[0],jobs)
+
+print('fitness: ',best_schedule.fitness, 'schedule: ',best_schedule.encode)
+
+print("###################  #####################")
+for item in best_schedule_decoded:
+    print('Job: ',item['name'], 'Machine: ',item['machine_number'], 'Start Time: ',item['start_time'], 'End Time: ',item['end_time'])
+    
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+

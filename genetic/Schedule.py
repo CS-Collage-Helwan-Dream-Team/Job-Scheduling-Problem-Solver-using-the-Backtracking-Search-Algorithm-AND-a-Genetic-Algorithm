@@ -1,6 +1,6 @@
 import random
 
-from app.config import POPULATION_SIZE,NUM_MACHINES
+from app.config import POPULATION_SIZE,NUM_MACHINES,MUTATION_RATE
 from DataModels.FullSchedule import FullSchedule
 from app import Job
 
@@ -82,16 +82,24 @@ class Schedule:
         child1 = parent1[:crossover_point] + parent2[crossover_point:]
         child2 = parent2[:crossover_point] + parent1[crossover_point:]
         return child1, child2
-
-    def crossovers(full_schedule: [FullSchedule]):
+    def __mutate(child):
+        mutate_point = random.randint(0, len(child) - 1)
+        child[mutate_point] = random.randint(0, NUM_MACHINES - 1)
+        return child
+    def crossovers_mutations(full_schedule: [FullSchedule]):
         after_crossover = []
         for _ in range(len(full_schedule)):
             parent1 = random.choice(full_schedule)
             parent2 = random.choice(full_schedule)
             child1, child2 = Schedule.__crossover(parent1.encode, parent2.encode)
-            after_crossover.append(FullSchedule(child1, -1))
-            after_crossover.append(FullSchedule(child2, -1))
-
+            random_number = random.random()
+            if random_number < MUTATION_RATE:
+                after_crossover.append(FullSchedule(Schedule.__mutate(child1), -1))
+                after_crossover.append(FullSchedule(Schedule.__mutate(child2), -1))
+            else:
+                after_crossover.append(FullSchedule(child1, -1))
+                after_crossover.append(FullSchedule(child2, -1))
+        #sort schedules by fitness
         return after_crossover
         
 
