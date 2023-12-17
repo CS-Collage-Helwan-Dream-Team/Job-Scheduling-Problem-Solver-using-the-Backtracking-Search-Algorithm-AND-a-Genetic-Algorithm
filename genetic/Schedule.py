@@ -13,7 +13,7 @@ class Schedule:
             encode = []
             for job in jobs:
                 if job.resources:
-                    machine = int(job.resources.replace("r", ""))
+                    machine = int(job.resources)
                     encode.append(machine)
                 else:
                     encode.append(random.randint(0, NUM_MACHINES - 1))
