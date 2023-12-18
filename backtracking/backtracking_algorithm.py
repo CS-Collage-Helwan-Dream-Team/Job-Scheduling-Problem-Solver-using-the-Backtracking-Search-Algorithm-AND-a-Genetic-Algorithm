@@ -6,17 +6,25 @@ class BacktrackingAlgorithm:
     def is_valid_schedule(self, schedule):
         resource_occupancy = {resource.resource_id: 0 for resource in self.problem_instance.resources}
 
-        for job, resource in schedule:
+        for index, (job, resource) in enumerate(schedule):
             # Check Resource Capacity
+            # if index == len(schedule) - 1:
+            #     print("finish 1")
             if resource_occupancy[resource.resource_id] + job.processing_time > resource.capacity:
                 return False
             
+            # if index == len(schedule) - 1:
+            #     print("finish 2")
             if job.requiredResource_id is not None and resource.resource_id != job.requiredResource_id:
                 return False
 
+            # if index == len(schedule) - 1:
+            #     print("finish 3")
             # Check job dependencies
             if job.dependency is not None and job.dependency not in [j.job_id for j, _ in schedule]:
                 return False
+            # if index == len(schedule) - 1:
+            #     print("finish 4")
 
             # Update Resource Occupancy
             resource_occupancy[resource.resource_id] += job.processing_time

@@ -5,16 +5,11 @@ from backtracking.backtracking_algorithm import BacktrackingAlgorithm
 
 # Define the job scheduling problem instance
 jobs = [
-    Job(1, 1),
-    Job(2, 5, dependency=1, requiredResource_id=1),
-    Job(3, 1, dependency=2, requiredResource_id=1),
-    Job(4, 4, dependency=3),
-    Job(5, 1, dependency=3, requiredResource_id=2),
-    # Job(6, 1, dependency=3),
-    # Job(7, 1, dependency=3),
-    # Job(8, 1, dependency=3),
-    # Job(9, 1, dependency=3),
-    # Job(10, 1, dependency=3),
+    Job('1', 21),
+    Job('2', 5, requiredResource_id=2),
+    Job('3', 1, requiredResource_id=2),
+    Job('4', 4),
+    Job('5', 20, dependency='1'),
 ]
 
 resources = Resource.generate_random_resources()
@@ -30,7 +25,14 @@ if(invalid_assigned_jobs_ids is not None):
     joined_ids = ', '.join(str(job_id) for job_id in invalid_assigned_jobs_ids)
     print(f"Warning: Total processing time for jobs {joined_ids} assigned to Resource {resource_id} exceeds its capacity.")
 
-problem_instance = JobSchedulingProblem(jobs, resources)
+preparedJobs = Job.check_and_split_large_jobs(jobs,resources)
+
+# for job in jobs:
+#     print(f'id: {job.job_id}, time: {job.processing_time}, depend: {job.dependency}, required: {job.requiredResource_id}')
+# for job in preparedJobs:
+#     print(f'id: {job.job_id}, time: {job.processing_time}, depend: {job.dependency}, required: {job.requiredResource_id}')
+
+problem_instance = JobSchedulingProblem(preparedJobs, resources)
 
 # Create an instance of the BacktrackingAlgorithm and solve the problem
 backtracking_algorithm = BacktrackingAlgorithm(problem_instance)

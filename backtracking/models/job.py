@@ -27,25 +27,37 @@ class Job:
         return [None, None]
     
     @staticmethod
-    def check_and_split_large_jobs(jobs, resources, max_processing_time_per_job):
+    def check_and_split_large_jobs(jobs, resources):
         max_capacity = max(resource.capacity for resource in resources)
+        dependency_id_to_replace = []
         new_jobs = []
         for job in jobs:
             if job.processing_time > max_capacity:
                 # Split the job into smaller ones
                 num_splits = job.processing_time // max_capacity
                 remainder = job.processing_time % max_capacity
+                last_split_id = job.job_id
 
                 for i in range(num_splits):
-                    new_job = Job(job_id=i+1, processing_time=max_capacity,dependency=job.dependency, requiredResource_id=job.requiredResource_id)
+                    job_dependency =  job.dependency if i == 0 else f'{job.job_id}.{i-1}'
+                    new_job = Job(job_id=f"{job.job_id}.{i+1}", processing_time=max_capacity,dependency=job_dependency, requiredResource_id=job.requiredResource_id)
                     new_jobs.append(new_job)
+                    last_split_id = f"{job.job_id}.{i+1}"
 
                 if remainder > 0:
                     # Create a last job with the remaining processing time
-                    last_job = Job(job_id=f"{job.job_id}_{num_splits + 1}", processing_time=remainder,
-                                    dependency=job.dependency, requiredResource_id=job.requiredResource_id)
+                    last_job = Job(job_id=f"{job.job_id}.{num_splits + 1}", processing_time=remainder,
+                                    dependency=f"{job.job_id}.{num_splits}", requiredResource_id=job.requiredResource_id)
                     new_jobs.append(last_job)
+                    last_split_id = f"{job.job_id}.{num_splits + 1}"
+                
+                dependency_id_to_replace.append((job.job_id, last_split_id))
             else:
                 new_jobs.append(job)
+
+        for job in new_jobs:
+            for job_id, splitted_id in dependency_id_to_replace:
+                if(job.dependency == job_id):
+                    job.dependency = splitted_id
 
         return new_jobs
