@@ -138,8 +138,6 @@ Genetic()
 def show_genetic_timeline():
     Genetic.add_jobs(jobs)
     results = Genetic.run(int(capacity_entry.get()),int(machines_entry.get()))
-
-    print(results)
     plot_timeline(add_colors_to_jobs(jobs,results),"Genetic Timeline")
 
 root = tk.Tk()

@@ -6,19 +6,27 @@ from app import Job
 
 class Schedule:
     NUM_MACHINES=0
-    def __init__(self,NUM_MACHINES):
+    jobs_with_resources = []
+    jobs=[]
+    def __init__(self,NUM_MACHINES, jobs):
         Schedule.NUM_MACHINES= NUM_MACHINES
+        Schedule.jobs = jobs
     def generate_random_schedules_and_encoding(jobs):
+        
         # schedules = []
         full_schedule = []
         for _ in range(POPULATION_SIZE):
             encode = []
             for job in jobs:
-                if job.resources:
+                if job.resources or job.resources == 0:
                     machine = int(job.resources)
+                    #check if the job has not been added to the jobs_with_resources list
+                    if job not in Schedule.jobs_with_resources:
+                        Schedule.jobs_with_resources.append(job)
                     encode.append(machine)
                 else:
-                    encode.append(random.randint(0, Schedule.NUM_MACHINES - 1))
+                    rand= random.randint(0, Schedule.NUM_MACHINES - 1)
+                    encode.append(rand)
             # schedules.append(encode)
             full_schedule.append(FullSchedule(encode, -1))
         return full_schedule
@@ -31,11 +39,18 @@ class Schedule:
             
         return decoded_schedule
 
-
-
+    def check_if_job_has_resources(job_name):
+        for job in Schedule.jobs_with_resources:
+            if job.name == job_name:
+                return True
+        return False
 
     def assign_jobs_to_machines(FullSchedule: FullSchedule, jobslist):
 
+        # FullSchedule example [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+        # index is the job index in jobslist
+        # value is the machine number
+        # jobslist example [{'name': '1', 'duration': 10, 'machine': None, 'prerequisites': ''}, {'name': '2', 'duration': 45, 'machine': 2, 'prerequisites': ''}, {'name': '3', 'duration': 10, 'machine': 0, 'prerequisites': [2]}, {'name': '4', 'duration': 100, 'machine': 1, 'prerequisites': ''}]
         jobs = Schedule.decode_schedule(FullSchedule.encode,jobslist)
         schedule = []
         machine_finish_times = {machine_number: 0 for machine_number in set(job.machine_number for job in jobs)}
@@ -83,10 +98,15 @@ class Schedule:
         crossover_point = random.randint(1, len(parent1) - 1)
         child1 = parent1[:crossover_point] + parent2[crossover_point:]
         child2 = parent2[:crossover_point] + parent1[crossover_point:]
+
         return child1, child2
     def __mutate(child):
         mutate_point = random.randint(0, len(child) - 1)
-        child[mutate_point] = random.randint(0, Schedule.NUM_MACHINES - 1)
+        decoded_child = Schedule.decode_schedule(child, Schedule.jobs)
+        if Schedule.check_if_job_has_resources(decoded_child[mutate_point].name):
+            child[mutate_point] = decoded_child[mutate_point].resources
+        else:
+            child[mutate_point] = random.randint(0, Schedule.NUM_MACHINES - 1)
         return child
     def crossovers_mutations(full_schedule: [FullSchedule]):
         after_crossover = []
