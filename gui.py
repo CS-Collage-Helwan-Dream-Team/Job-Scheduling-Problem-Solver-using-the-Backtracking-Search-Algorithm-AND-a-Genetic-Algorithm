@@ -71,12 +71,18 @@ def update_job_list():
     for job in jobs:
         job_listbox.insert(tk.END, f"{job['name']} - {job['duration']}  - Machine: {job['machine']} - Prerequisites: {job['prerequisites']}")
 
+Backtracking()
 def show_backtracking_timeline():
-    plot_timeline(jobs,"Backtracking Timeline")
+  
+    Backtracking.add_resources(int(machines_entry.get()),int(capacity_entry.get()))
+    Backtracking.add_jobs(jobs)
+    results = Backtracking.run()
+    # plot_timeline(results,"Backtracking Timeline")
 Genetic()
 def show_genetic_timeline():
     Genetic.add_jobs(jobs)
     results = Genetic.run(int(capacity_entry.get()),int(machines_entry.get()))
+    print(results)
     plot_timeline(results,"Genetic Timeline")
 
 root = tk.Tk()
