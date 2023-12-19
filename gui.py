@@ -2,10 +2,14 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from Backtracking import Backtracking
 from Genetic import Genetic
+import numpy as np
+import time
 import random
 
 jobs = []
 results = []
+backtracking_execution_time=0.0
+genetic_algorithm_execution_time=0.0
 
 # start matplotlib code
 def plot_timeline(jobs,title):
@@ -127,18 +131,44 @@ def add_colors_to_jobs(jobs, results):
 
     return results_with_colors
 
+
 Backtracking()
 def show_backtracking_timeline():
     Backtracking.add_resources(int(machines_entry.get()),int(capacity_entry.get()))
+    
+    #claculate execution time and memory space
+    start_time = time.time()
     Backtracking.add_jobs(jobs)
     results = Backtracking.run()
-    plot_timeline(add_colors_to_jobs(jobs,results),"Backtracking Timeline")
+    end_time = time.time()
+    global backtracking_execution_time
+    backtracking_execution_time = end_time - start_time
+    plot_timeline(add_colors_to_jobs(jobs,results),f"Backtracking Timeline Execution Time: {backtracking_execution_time} s")
 Genetic()
 def show_genetic_timeline():
     Genetic.add_jobs(jobs)
+    #claculate execution time and memory space
+    start_time = time.time()
     results = Genetic.run(int(capacity_entry.get()),int(machines_entry.get()))
-    plot_timeline(add_colors_to_jobs(jobs,results),"Genetic Timeline")
+    end_time = time.time()
+    global genetic_algorithm_execution_time
+    genetic_algorithm_execution_time = end_time - start_time
+    plot_timeline(add_colors_to_jobs(jobs,results),f"Genetic Timeline Execution Time: {genetic_algorithm_execution_time} s")
 
+
+def show_plots ():
+    print(backtracking_execution_time,genetic_algorithm_execution_time)
+    plt.bar(['Backtracking', 'Genetic Algorithm'], [backtracking_execution_time, genetic_algorithm_execution_time])
+    plt.xlabel('Algorithms')
+    plt.ylabel('Execution Time (s)')
+    plt.title('Comparison of Execution Times between Backtracking and Genetic Algorithm')
+    plt.show()
+    ###############
+    # plt.bar(['Backtracking', 'Genetic Algorithm'], [backtracking_memory_space, genetic_algorithm_memory_space])
+    # plt.xlabel('Algorithms')
+    # plt.ylabel('memory space')
+    # plt.title('Comparison of memory space between Backtracking and Genetic Algorithm')
+    # plt.show()
 root = tk.Tk()
 root.title("Job Schedule Timeline")
 
@@ -188,6 +218,9 @@ label_capacity = tk.Label(root, text="Machines Capacity:")
 label_capacity.grid(row=1, column=2, padx=10, pady=5)
 capacity_entry = tk.Entry(root)
 capacity_entry.grid(row=1, column=3, padx=10, pady=5)
+
+show_plots_btn = tk.Button(root, text="show_plots", command=show_plots)
+show_plots_btn.grid(row=6, column=3, columnspan=2, padx=10, pady=5)
 
 show_button_genetic = tk.Button(root, text="Show genetic Timeline", command=show_genetic_timeline)
 show_button_genetic.grid(row=8, column=0, columnspan=2, padx=10, pady=5)
