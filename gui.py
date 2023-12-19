@@ -143,6 +143,8 @@ def show_backtracking_timeline():
     end_time = time.time()
     global backtracking_execution_time
     backtracking_execution_time = end_time - start_time
+    if results is None:
+        return
     plot_timeline(add_colors_to_jobs(jobs,results),f"Backtracking Timeline Execution Time: {backtracking_execution_time} s")
 Genetic()
 def show_genetic_timeline():
@@ -153,6 +155,8 @@ def show_genetic_timeline():
     end_time = time.time()
     global genetic_algorithm_execution_time
     genetic_algorithm_execution_time = end_time - start_time
+    if results is None:
+        return
     plot_timeline(add_colors_to_jobs(jobs,results),f"Genetic Timeline Execution Time: {genetic_algorithm_execution_time} s")
 
 

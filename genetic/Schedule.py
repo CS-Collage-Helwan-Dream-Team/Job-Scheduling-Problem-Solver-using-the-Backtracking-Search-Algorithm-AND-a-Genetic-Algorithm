@@ -56,7 +56,7 @@ class Schedule:
         #split the jobs into two arrays, one with prerequisites and one without
         jobs_with_prerequisites = [job for job in jobs if job.prerequisites]
         jobs_without_prerequisites = [job for job in jobs if not job.prerequisites]
-        #sort jobs with prerequisites by prerequisite float number descending
+        #sort jobs with prerequisites by prerequisite float number asinding
         jobs_with_prerequisites.sort(key=lambda x: float(x.prerequisites[0]))
         #merge the two arrays
         jobs =  jobs_without_prerequisites +jobs_with_prerequisites 
