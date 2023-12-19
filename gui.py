@@ -2,6 +2,7 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from Backtracking import Backtracking
 from Genetic import Genetic
+import random
 
 jobs = []
 results = []
@@ -15,16 +16,18 @@ def plot_timeline(jobs,title):
         machine = job['machine']
         if machine not in machines:
             machines[machine] = []
-        machines[machine].append((job['name'], job['start_time'], job['end_time']))
+        machines[machine].append((job['name'], job['start_time'], job['end_time'],job['color']))
 
     yticks = []
     ylabels = []
     for i, (machine, job_list) in enumerate(machines.items()):
         yticks.append(i)
         ylabels.append(f"Machine {machine}")
-        for j, (job_name, start_time, end_time) in enumerate(job_list):
+        for j, (job_name, start_time, end_time,color) in enumerate(job_list):
+             
+            margin = 0.1
             duration = end_time - start_time
-            ax.barh(i, duration, left=start_time, height=0.5, align='center', color='blue', alpha=0.7)
+            ax.barh(i, duration, left=start_time + j * margin, height=0.5, align='center', color= color, alpha=0.7)
             ax.text((start_time + end_time) / 2, i, f"{job_name}\n{duration}", ha='center', va='center')
 
 
@@ -44,12 +47,12 @@ def add_job():
 
     if(machine != ""):
         if(int(machine) >= int(machines_entry.get())):
-            machine = ""
+            machine = random.randint(0, int(machines_entry.get()) - 1)
         else:
-            machine = int(machine)
+            machine = machine
 
     else:
-        machine = ""
+        machine = random.randint(0, int(machines_entry.get()) - 1)
     prerequisites = prerequisites_entry.get()
     jobs.append({'name': job_name, 'duration': duration, 'machine': machine, 'prerequisites': prerequisites})
     update_job_list()
@@ -71,6 +74,59 @@ def update_job_list():
     for job in jobs:
         job_listbox.insert(tk.END, f"{job['name']} - {job['duration']}  - Machine: {job['machine']} - Prerequisites: {job['prerequisites']}")
 
+#add colors
+def extract_base_job_name(job_name):
+    # Extract the base job name (e.g., '2' from '2.2' or '1' from '1.2')
+    split_name = job_name.split('.')
+    return split_name[0]
+
+def add_colors_to_jobs(jobs, results):
+    # Create a dictionary to store colors for each job
+    job_colors = {}
+
+    # Assign unique colors to jobs with no dependencies
+    color_index = 0
+    for job in jobs:
+        base_job_name = extract_base_job_name(job['name'])
+        if base_job_name not in job_colors:
+            job_colors[base_job_name] = plt.cm.get_cmap('tab10')(color_index)
+            color_index += 1
+
+    # Assign colors to jobs based on dependencies
+    for job in jobs:
+        base_job_name = extract_base_job_name(job['name'])
+        if job['prerequisites'] != '':
+            prerequisites = job['prerequisites'].split(',')
+            job_color = None
+            for prereq in prerequisites:
+                prereq_base_name = extract_base_job_name(prereq)
+                if prereq_base_name in job_colors:
+                    job_color = job_colors[prereq_base_name]
+                    break
+            if job_color is None:
+                job_color = plt.cm.get_cmap('tab10')(color_index)
+                color_index += 1
+            job_colors[base_job_name] = job_color
+
+    # Add colors to results
+    results_with_colors = []
+    for result in results:
+        result_copy = result.copy()
+        job_name = extract_base_job_name(result_copy['name'])
+        if job_name in job_colors:
+            color_hex = '#{:02x}{:02x}{:02x}'.format(
+                int(job_colors[job_name][0] * 255),
+                int(job_colors[job_name][1] * 255),
+                int(job_colors[job_name][2] * 255)
+            )
+            result_copy['color'] = color_hex
+        else:
+            # Assign a default color if job not found in job_colors
+            result_copy['color'] = '#000000'  # Black color
+        results_with_colors.append(result_copy)
+
+    return results_with_colors
+
 Backtracking()
 def show_backtracking_timeline():
   
@@ -82,8 +138,9 @@ Genetic()
 def show_genetic_timeline():
     Genetic.add_jobs(jobs)
     results = Genetic.run(int(capacity_entry.get()),int(machines_entry.get()))
+
     print(results)
-    plot_timeline(results,"Genetic Timeline")
+    plot_timeline(add_colors_to_jobs(jobs,results),"Genetic Timeline")
 
 root = tk.Tk()
 root.title("Job Schedule Timeline")

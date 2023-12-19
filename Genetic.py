@@ -11,12 +11,13 @@ class Genetic:
         Genetic.jobs=[]
         for job in jobs:
             Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else [],job['machine']))
+        
 
     def run(MACHINE_CAPACITY,num_machines):
         Job.handle_split_dependencies(Genetic.jobs,MACHINE_CAPACITY)
-        # print("################### New Jobs: #####################")
-        # for job in Genetic.jobs:
-        #     print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
+        print("################### New Jobs: #####################")
+        for job in Genetic.jobs:
+            print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
         best_schedules_after_crossover=[]
         Schedule(num_machines)
         population = Schedule.generate_random_schedules_and_encoding(Genetic.jobs)
