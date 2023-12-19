@@ -7,8 +7,8 @@ class Resource:
     def __str__(self):
         return f"Resource {self.resource_id} (Capacity: {self.capacity})"
     @staticmethod
-    def generate_random_resources():
+    def generate_random_resources(num, capacity):
         resources = []
-        for i in range(NUM_MACHINES):
-            resources.append(Resource(i, MACHINE_CAPACITY))
+        for i in range(num):
+            resources.append(Resource(i, capacity))
         return resources
