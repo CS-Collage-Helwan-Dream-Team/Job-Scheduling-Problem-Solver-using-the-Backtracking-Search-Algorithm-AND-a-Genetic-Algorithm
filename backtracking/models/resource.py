@@ -1,4 +1,4 @@
-from app.config import MACHINE_CAPACITY,NUM_MACHINES
+
 class Resource:
     def __init__(self, resource_id, capacity):
         self.resource_id = resource_id

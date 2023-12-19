@@ -129,11 +129,10 @@ def add_colors_to_jobs(jobs, results):
 
 Backtracking()
 def show_backtracking_timeline():
-  
     Backtracking.add_resources(int(machines_entry.get()),int(capacity_entry.get()))
     Backtracking.add_jobs(jobs)
     results = Backtracking.run()
-    # plot_timeline(results,"Backtracking Timeline")
+    plot_timeline(add_colors_to_jobs(jobs,results),"Backtracking Timeline")
 Genetic()
 def show_genetic_timeline():
     Genetic.add_jobs(jobs)

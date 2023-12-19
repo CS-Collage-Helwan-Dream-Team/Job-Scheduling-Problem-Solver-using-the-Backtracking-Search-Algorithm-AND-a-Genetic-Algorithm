@@ -47,10 +47,6 @@ class Schedule:
 
     def assign_jobs_to_machines(FullSchedule: FullSchedule, jobslist):
 
-        # FullSchedule example [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
-        # index is the job index in jobslist
-        # value is the machine number
-        # jobslist example [{'name': '1', 'duration': 10, 'machine': None, 'prerequisites': ''}, {'name': '2', 'duration': 45, 'machine': 2, 'prerequisites': ''}, {'name': '3', 'duration': 10, 'machine': 0, 'prerequisites': [2]}, {'name': '4', 'duration': 100, 'machine': 1, 'prerequisites': ''}]
         jobs = Schedule.decode_schedule(FullSchedule.encode,jobslist)
         schedule = []
         machine_finish_times = {machine_number: 0 for machine_number in set(job.machine_number for job in jobs)}

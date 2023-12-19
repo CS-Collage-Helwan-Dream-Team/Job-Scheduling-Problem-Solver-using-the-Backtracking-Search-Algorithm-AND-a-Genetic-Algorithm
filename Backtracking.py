@@ -34,7 +34,7 @@ class Backtracking:
 
         # Create an instance of the BacktrackingAlgorithm and solve the problem
         backtracking_algorithm = BacktrackingAlgorithm(problem_instance)
-        backtracking_algorithm.solve()
+        return backtracking_algorithm.solve()
 
 
 # # Define the job scheduling problem instance

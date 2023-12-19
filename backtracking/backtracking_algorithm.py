@@ -42,12 +42,12 @@ class BacktrackingAlgorithm:
         self.backtrack(initial_schedule, remaining_jobs)
 
         if self.best_schedule:
-            self.display_schedule()
+            return self.display_schedule()
         else:
             print("No valid schedule found.")
 
     def display_schedule(self):
-        print("Optimal Schedule:")
+        
         resource_occupancy = {resource.resource_id: 0 for resource in self.problem_instance.resources}
         job_start_times = {job.job_id: 0 for job in self.problem_instance.jobs}
         jobs_start_time = {job.job_id: 0 for job in self.problem_instance.jobs}
@@ -84,10 +84,9 @@ class BacktrackingAlgorithm:
             resource = assignment[1]
             start_time = jobs_start_time[job.job_id]
             end_time = start_time + job.processing_time
-
-            print(f"Job: {job.job_id}, Machine: {resource.resource_id}, "f"Start Time: {start_time}, End Time: { end_time}")
-            
             jobs.append({"name":job.job_id, "start_time":start_time, "end_time":end_time,"machine":resource.resource_id})
 
+        
+        
         return jobs
 
