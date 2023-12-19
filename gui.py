@@ -1,0 +1,125 @@
+
+
+
+
+import tkinter as tk
+import matplotlib.pyplot as plt
+
+jobs = []
+# start matplotlib code
+def plot_timeline(jobs,title):
+    fig, ax = plt.subplots()
+
+    machines = {}
+    for i, job in enumerate(jobs):
+        machine = job['machine']
+        if machine not in machines:
+            machines[machine] = []
+        machines[machine].append((job['name'], job['start_time'], job['end_time']))
+
+    yticks = []
+    ylabels = []
+    for i, (machine, job_list) in enumerate(machines.items()):
+        yticks.append(i)
+        ylabels.append(f"Machine {machine}")
+        for j, (job_name, start_time, end_time) in enumerate(job_list):
+            duration = end_time - start_time
+            ax.barh(i, duration, left=start_time, height=0.5, align='center', color='blue', alpha=0.7)
+            ax.text((start_time + end_time) / 2, i, f"{job_name}\n{duration}", ha='center', va='center')
+
+    print(jobs)
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(ylabels)
+    ax.set_xlabel('Time')
+    ax.set_title(title)
+    plt.show()
+
+#start tkinter code
+    
+def add_job():
+    job_name = job_entry.get()
+    start_time = float(start_time_entry.get())
+    end_time = float(end_time_entry.get())
+    machine = int(machine_entry.get())
+    jobs.append({'name': job_name, 'start_time': start_time, 'end_time': end_time, 'machine': machine})
+    update_job_list()
+    job_entry.delete(0, tk.END)
+    start_time_entry.delete(0, tk.END)
+    end_time_entry.delete(0, tk.END)
+    machine_entry.delete(0, tk.END)
+
+def delete_job():
+    selected = job_listbox.curselection()
+    if selected:
+        index = selected[0]
+        del jobs[index]
+        update_job_list()
+
+def update_job_list():
+    job_listbox.delete(0, tk.END)
+    for job in jobs:
+        job_listbox.insert(tk.END, f"{job['name']} - {job['start_time']} - {job['end_time']} - Machine: {job['machine']}")
+
+def show_backtracking_timeline():
+    plot_timeline(jobs,"Backtracking Timeline")
+
+def show_genetic_timeline():
+    plot_timeline(jobs,"Genetic Timeline")
+
+root = tk.Tk()
+root.title("Job Schedule Timeline")
+
+label_job = tk.Label(root, text="Job Name:")
+label_job.grid(row=0, column=0, padx=10, pady=5)
+job_entry = tk.Entry(root)
+job_entry.grid(row=0, column=1, padx=10, pady=5)
+
+label_start_time = tk.Label(root, text="Start Time:")
+label_start_time.grid(row=1, column=0, padx=10, pady=5)
+start_time_entry = tk.Entry(root)
+start_time_entry.grid(row=1, column=1, padx=10, pady=5)
+
+label_end_time = tk.Label(root, text="End Time:")
+label_end_time.grid(row=2, column=0, padx=10, pady=5)
+end_time_entry = tk.Entry(root)
+end_time_entry.grid(row=2, column=1, padx=10, pady=5)
+
+label_machine = tk.Label(root, text="Machine:")
+label_machine.grid(row=3, column=0, padx=10, pady=5)
+machine_entry = tk.Entry(root)
+machine_entry.grid(row=3, column=1, padx=10, pady=5)
+
+label_prerequisites = tk.Label(root, text="Prerequisites:")
+label_prerequisites.grid(row=2, column=0, padx=10, pady=5)
+prerequisites_entry = tk.Entry(root)
+prerequisites_entry.grid(row=2, column=1, padx=10, pady=5)
+
+add_button = tk.Button(root, text="Add Job", command=add_job)
+add_button.grid(row=4, column=0, columnspan=2, padx=10, pady=5)
+
+delete_button = tk.Button(root, text="Delete Job", command=delete_job)
+delete_button.grid(row=5, column=0, columnspan=2, padx=10, pady=5)
+
+label_job_list = tk.Label(root, text="Current Jobs:")
+label_job_list.grid(row=6, column=0, columnspan=2, padx=10, pady=5)
+job_listbox = tk.Listbox(root, width=40)
+job_listbox.grid(row=7, column=0, columnspan=2, padx=10, pady=5)
+
+# Machines Section
+label_machines = tk.Label(root, text="Number of Machines:")
+label_machines.grid(row=0, column=2, padx=10, pady=5)
+machines_entry = tk.Entry(root)
+machines_entry.grid(row=0, column=3, padx=10, pady=5)
+
+label_capacity = tk.Label(root, text="Machines Capacity:")
+label_capacity.grid(row=1, column=2, padx=10, pady=5)
+capacity_entry = tk.Entry(root)
+capacity_entry.grid(row=1, column=3, padx=10, pady=5)
+
+show_button_genetic = tk.Button(root, text="Show genetic Timeline", command=show_genetic_timeline)
+show_button_genetic.grid(row=8, column=0, columnspan=2, padx=10, pady=5)
+
+show_button_backtracking = tk.Button(root, text="Show backtracking Timeline", command=show_backtracking_timeline)
+show_button_backtracking.grid(row=9, column=0, columnspan=2, padx=10, pady=5)
+
+root.mainloop()
