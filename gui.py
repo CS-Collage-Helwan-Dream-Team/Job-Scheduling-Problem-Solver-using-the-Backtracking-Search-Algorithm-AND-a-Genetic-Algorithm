@@ -47,12 +47,12 @@ def add_job():
 
     if(machine != ""):
         if(int(machine) >= int(machines_entry.get())):
-            machine = random.randint(0, int(machines_entry.get()) - 1)
+            machine = None
         else:
             machine = machine
 
     else:
-        machine = random.randint(0, int(machines_entry.get()) - 1)
+        machine = None
     prerequisites = prerequisites_entry.get()
     jobs.append({'name': job_name, 'duration': duration, 'machine': machine, 'prerequisites': prerequisites})
     update_job_list()

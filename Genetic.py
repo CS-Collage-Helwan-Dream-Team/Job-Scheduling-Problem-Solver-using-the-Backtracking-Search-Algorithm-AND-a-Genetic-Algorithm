@@ -10,7 +10,14 @@ class Genetic:
     def add_jobs(jobs):
         Genetic.jobs=[]
         for job in jobs:
-            Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else [],job['machine']))
+            if job['prerequisites'] and job['machine']:
+                Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else [],job['machine']))
+            elif job['prerequisites']:
+                Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else []))
+            elif job['machine']:
+                Genetic.jobs.append(Job(job['name'],job['duration'],[],job['machine']))
+            else:
+                Genetic.jobs.append(Job(job['name'],job['duration']))
         
 
     def run(MACHINE_CAPACITY,num_machines):
