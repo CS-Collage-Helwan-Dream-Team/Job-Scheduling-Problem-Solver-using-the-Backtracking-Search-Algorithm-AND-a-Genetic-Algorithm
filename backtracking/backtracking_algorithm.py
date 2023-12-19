@@ -8,12 +8,15 @@ class BacktrackingAlgorithm:
 
         for job, resource in schedule:
             if resource_occupancy[resource.resource_id] + job.processing_time > resource.capacity:
+                print("Job", job.job_id, "exceeds resource capacity.")
                 return False
 
-            if job.requiredResource_id is not None and resource.resource_id != job.requiredResource_id:
+            if job.requiredResource_id is not None and int(resource.resource_id) != int(job.requiredResource_id):
+                print("Job", job.job_id, "requires resource", job.requiredResource_id, "but was assigned to resource", resource.resource_id)
                 return False
 
             if job.dependency is not None and job.dependency not in [j.job_id for j, _ in schedule]:
+                print("Job", job.job_id, "has dependency", job.dependency, "but it was not scheduled yet.")
                 return False
 
             resource_occupancy[resource.resource_id] += job.processing_time
