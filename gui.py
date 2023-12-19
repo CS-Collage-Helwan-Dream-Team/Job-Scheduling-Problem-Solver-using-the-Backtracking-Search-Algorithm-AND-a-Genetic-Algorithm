@@ -4,6 +4,8 @@ from Backtracking import Backtracking
 from Genetic import Genetic
 
 jobs = []
+results = []
+
 # start matplotlib code
 def plot_timeline(jobs,title):
     fig, ax = plt.subplots()
@@ -25,7 +27,7 @@ def plot_timeline(jobs,title):
             ax.barh(i, duration, left=start_time, height=0.5, align='center', color='blue', alpha=0.7)
             ax.text((start_time + end_time) / 2, i, f"{job_name}\n{duration}", ha='center', va='center')
 
-    print(jobs)
+
     ax.set_yticks(yticks)
     ax.set_yticklabels(ylabels)
     ax.set_xlabel('Time')
@@ -71,12 +73,10 @@ def update_job_list():
 
 def show_backtracking_timeline():
     plot_timeline(jobs,"Backtracking Timeline")
-
+Genetic()
 def show_genetic_timeline():
-    print (jobs)
-    Genetic(int(machines_entry.get()),int(capacity_entry.get()))
-    Genetic.jobs(jobs)
-    results = Genetic.run()
+    Genetic.add_jobs(jobs)
+    results = Genetic.run(int(capacity_entry.get()),int(machines_entry.get()))
     plot_timeline(results,"Genetic Timeline")
 
 root = tk.Tk()

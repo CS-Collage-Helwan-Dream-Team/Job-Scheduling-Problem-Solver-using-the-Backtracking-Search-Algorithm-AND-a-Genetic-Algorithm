@@ -1,11 +1,13 @@
 import random
 
-from app.config import POPULATION_SIZE,NUM_MACHINES,MUTATION_RATE
+from app.config import POPULATION_SIZE,MUTATION_RATE
 from DataModels.FullSchedule import FullSchedule
 from app import Job
 
 class Schedule:
-    
+    NUM_MACHINES=0
+    def __init__(self,NUM_MACHINES):
+        Schedule.NUM_MACHINES= NUM_MACHINES
     def generate_random_schedules_and_encoding(jobs):
         # schedules = []
         full_schedule = []
@@ -16,7 +18,7 @@ class Schedule:
                     machine = int(job.resources)
                     encode.append(machine)
                 else:
-                    encode.append(random.randint(0, NUM_MACHINES - 1))
+                    encode.append(random.randint(0, Schedule.NUM_MACHINES - 1))
             # schedules.append(encode)
             full_schedule.append(FullSchedule(encode, -1))
         return full_schedule
@@ -84,7 +86,7 @@ class Schedule:
         return child1, child2
     def __mutate(child):
         mutate_point = random.randint(0, len(child) - 1)
-        child[mutate_point] = random.randint(0, NUM_MACHINES - 1)
+        child[mutate_point] = random.randint(0, Schedule.NUM_MACHINES - 1)
         return child
     def crossovers_mutations(full_schedule: [FullSchedule]):
         after_crossover = []
