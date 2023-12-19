@@ -1,7 +1,3 @@
-
-
-
-
 import tkinter as tk
 import matplotlib.pyplot as plt
 
@@ -32,22 +28,23 @@ def plot_timeline(jobs,title):
     ax.set_yticklabels(ylabels)
     ax.set_xlabel('Time')
     ax.set_title(title)
-    
+
     plt.show()
 
 #start tkinter code
     
 def add_job():
     job_name = job_entry.get()
-    start_time = float(start_time_entry.get())
-    end_time = float(end_time_entry.get())
+    duration = float(duration_entry.get())
     machine = int(machine_entry.get())
-    jobs.append({'name': job_name, 'start_time': start_time, 'end_time': end_time, 'machine': machine})
+    prerequisites = prerequisites_entry.get()
+    jobs.append({'name': job_name, 'duration': duration, 'machine': machine, 'prerequisites': prerequisites})
     update_job_list()
     job_entry.delete(0, tk.END)
-    start_time_entry.delete(0, tk.END)
+    duration_entry.delete(0, tk.END)
     end_time_entry.delete(0, tk.END)
     machine_entry.delete(0, tk.END)
+    prerequisites_entry.delete(0, tk.END)
 
 def delete_job():
     selected = job_listbox.curselection()
@@ -59,13 +56,14 @@ def delete_job():
 def update_job_list():
     job_listbox.delete(0, tk.END)
     for job in jobs:
-        job_listbox.insert(tk.END, f"{job['name']} - {job['start_time']} - {job['end_time']} - Machine: {job['machine']}")
+        job_listbox.insert(tk.END, f"{job['name']} - {job['duration']}  - Machine: {job['machine']} - Prerequisites: {job['prerequisites']}")
 
 def show_backtracking_timeline():
     plot_timeline(jobs,"Backtracking Timeline")
 
 def show_genetic_timeline():
-    plot_timeline(jobs,"Genetic Timeline")
+    print(jobs)
+    # plot_timeline(jobs,"Genetic Timeline")
 
 root = tk.Tk()
 root.title("Job Schedule Timeline")
@@ -75,10 +73,10 @@ label_job.grid(row=0, column=0, padx=10, pady=5)
 job_entry = tk.Entry(root)
 job_entry.grid(row=0, column=1, padx=10, pady=5)
 
-label_start_time = tk.Label(root, text="Start Time:")
-label_start_time.grid(row=1, column=0, padx=10, pady=5)
-start_time_entry = tk.Entry(root)
-start_time_entry.grid(row=1, column=1, padx=10, pady=5)
+label_duration = tk.Label(root, text="duration :")
+label_duration.grid(row=1, column=0, padx=10, pady=5)
+duration_entry = tk.Entry(root)
+duration_entry.grid(row=1, column=1, padx=10, pady=5)
 
 label_end_time = tk.Label(root, text="End Time:")
 label_end_time.grid(row=2, column=0, padx=10, pady=5)

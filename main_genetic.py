@@ -10,6 +10,7 @@ def calc_fitness(full_schedules):
     
 
 # Your existing code
+
 jobs = [
     Job('1', 60,),
     Job('2', 50,['1']),
