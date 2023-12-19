@@ -34,8 +34,8 @@ class Job:
         for job in jobs:
             if job.processing_time > max_capacity:
                 # Split the job into smaller ones
-                num_splits = job.processing_time // max_capacity
-                remainder = job.processing_time % max_capacity
+                num_splits = int(job.processing_time // max_capacity)
+                remainder = int(job.processing_time % max_capacity)
                 last_split_id = job.job_id
 
                 for i in range(num_splits):
