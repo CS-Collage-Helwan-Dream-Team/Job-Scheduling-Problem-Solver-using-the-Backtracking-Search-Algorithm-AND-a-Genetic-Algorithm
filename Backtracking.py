@@ -16,7 +16,7 @@ class Backtracking:
             Backtracking.jobs.append(Job(job['name'],job['duration'],dependency=job['prerequisites'],requiredResource_id=job['machine']))
     
     def run():
-        if(not Job.check_total_processing_time(jobs, Backtracking.resources)):
+        if(not Job.check_total_processing_time(Backtracking.jobs, Backtracking.resources)):
             print("Exceeded the total resource capacity")
 
         [invalid_assigned_jobs_ids, resource_id] = Job.check_exceeded_require_resource_capacity(Backtracking.jobs, Backtracking.resources)
@@ -46,7 +46,7 @@ class Backtracking:
 
 
 
-# # TODO: split the large jop to two or more if needed 
+
 # if(not Job.check_total_processing_time(jobs, resources)):
 #     print("Exceeded the total resource capacity")
 
