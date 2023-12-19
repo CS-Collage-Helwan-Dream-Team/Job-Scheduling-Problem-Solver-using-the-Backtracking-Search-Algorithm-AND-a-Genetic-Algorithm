@@ -62,8 +62,8 @@ def show_backtracking_timeline():
     plot_timeline(jobs,"Backtracking Timeline")
 
 def show_genetic_timeline():
-    print(jobs)
-    # plot_timeline(jobs,"Genetic Timeline")
+    results = []
+    plot_timeline(results,"Genetic Timeline")
 
 root = tk.Tk()
 root.title("Job Schedule Timeline")
