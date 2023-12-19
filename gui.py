@@ -32,6 +32,7 @@ def plot_timeline(jobs,title):
     ax.set_yticklabels(ylabels)
     ax.set_xlabel('Time')
     ax.set_title(title)
+    
     plt.show()
 
 #start tkinter code
