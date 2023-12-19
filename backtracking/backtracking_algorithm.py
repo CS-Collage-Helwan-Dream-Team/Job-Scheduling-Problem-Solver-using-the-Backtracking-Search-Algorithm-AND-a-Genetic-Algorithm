@@ -6,7 +6,7 @@ class BacktrackingAlgorithm:
     def is_valid_schedule(self, schedule):
         resource_occupancy = {resource.resource_id: 0 for resource in self.problem_instance.resources}
 
-        for index, (job, resource) in enumerate(schedule):
+        for job, resource in schedule:
             # Check Resource Capacity
             # if index == len(schedule) - 1:
             #     print("finish 1")
@@ -50,7 +50,6 @@ class BacktrackingAlgorithm:
     def solve(self):
         initial_schedule = []
         remaining_jobs = self.problem_instance.jobs.copy()
-
         self.backtrack(initial_schedule, remaining_jobs)
 
         if self.best_schedule:
@@ -62,24 +61,57 @@ class BacktrackingAlgorithm:
         print("Optimal Schedule:")
         resource_occupancy = {resource.resource_id: 0 for resource in self.problem_instance.resources}
         job_start_times = {job.job_id: 0 for job in self.problem_instance.jobs}
+        jobs_start_time = {job.job_id: 0 for job in self.problem_instance.jobs}
         jobs=[]
+
         for assignment in self.best_schedule:
             job = assignment[0]
             resource = assignment[1]
-
+            
             # Calculate the start time considering dependencies
             dependency_start_time = job_start_times[job.dependency] if job.dependency is not None else 0
             start_time = max(resource_occupancy[resource.resource_id], dependency_start_time)
 
             end_time = start_time + job.processing_time
 
-            print(f"Job: {job.job_id}, Machine: {resource.resource_id}, "
-                f"Start Time: {start_time}, End Time: {end_time}")
-            jobs.append({"name":job.job_id, "start_time":start_time, "end_time":end_time,"machine":resource.resource_id})
+            # print(f"Job: {job.job_id}, Machine: {resource.resource_id}, "
+            #     f"Start Time: {start_time}, End Time: {end_time}")
+            
+            # jobs.append({"name":job.job_id, "start_time":start_time, "end_time":end_time,"machine":resource.resource_id})
             # Update Resource Occupancy and Job Start Times
             resource_occupancy[resource.resource_id] = end_time
             job_start_times[job.job_id] = end_time
+            jobs_start_time[job.job_id] = start_time
             
-        return jobs
+        for assignment in self.best_schedule:
+            job = assignment[0]
+            resource = assignment[1]
 
+            if(not job.dependency): continue
+            # Calculate the start time considering dependencies
+            dependency_start_time = job_start_times[job.dependency] if job.dependency is not None else 0
+            start_time = max(resource_occupancy[resource.resource_id], dependency_start_time)
+
+            end_time = start_time + job.processing_time
+
+            # print(f"Job: {job.job_id}, Machine: {resource.resource_id}, "
+            #     f"Start Time: {start_time}, End Time: {end_time}")
+            
+            # jobs.append({"name":job.job_id, "start_time":start_time, "end_time":end_time,"machine":resource.resource_id})
+            # Update Resource Occupancy and Job Start Times
+            resource_occupancy[resource.resource_id] = end_time
+            job_start_times[job.job_id] = end_time
+            jobs_start_time[job.job_id] = start_time
+
+        for assignment in self.best_schedule:
+            job = assignment[0]
+            resource = assignment[1]
+            start_time = jobs_start_time[job.job_id]
+            end_time = start_time + job.processing_time
+
+            print(f"Job: {job.job_id}, Machine: {resource.resource_id}, "f"Start Time: {start_time}, End Time: { end_time}")
+            
+            # jobs.append({"name":job.job_id, "start_time":start_time, "end_time":end_time,"machine":resource.resource_id})
+
+        return jobs
 

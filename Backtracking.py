@@ -15,7 +15,7 @@ class Backtracking:
     def add_jobs(jobs):
         Backtracking.jobs=[]
         for job in jobs:
-            Backtracking.jobs.append(Job(job['name'],job['duration'],dependency=job['prerequisites'],requiredResource_id=job['machine']))
+            Backtracking.jobs.append(Job(job['name'],job['duration'],dependency=job['prerequisites']if job['prerequisites'] !=''else None,requiredResource_id=job['machine'] if job['machine'] !=''else None))
         print(Backtracking.jobs)
     
     def run():
