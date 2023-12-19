@@ -16,7 +16,7 @@ class Backtracking:
         Backtracking.jobs=[]
         for job in jobs:
             Backtracking.jobs.append(Job(job['name'],job['duration'],dependency=job['prerequisites']if job['prerequisites'] !=''else None,requiredResource_id=job['machine'] if job['machine'] !=''else None))
-        print(Backtracking.jobs)
+        
     
     def run():
         if(not Job.check_total_processing_time(Backtracking.jobs, Backtracking.resources)):
