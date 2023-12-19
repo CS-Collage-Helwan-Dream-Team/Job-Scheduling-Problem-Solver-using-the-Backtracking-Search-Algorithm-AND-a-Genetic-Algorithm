@@ -10,23 +10,13 @@ class Genetic:
     def add_jobs(jobs):
         Genetic.jobs=[]
         for job in jobs:
-            if job['prerequisites'] and job['machine']:
-                Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else [],job['machine']))
-            elif job['prerequisites']:
-                Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else []))
-            elif job['machine']:
-                Genetic.jobs.append(Job(job['name'],job['duration'],[],job['machine']))
-            else:
-                Genetic.jobs.append(Job(job['name'],job['duration']))
+            Genetic.jobs.append(Job(job['name'],job['duration'],job['prerequisites'],job['machine']))
         
 
     def run(MACHINE_CAPACITY,num_machines):
         Job.handle_split_dependencies(Genetic.jobs,MACHINE_CAPACITY)
-        print("################### New Jobs: #####################")
-        for job in Genetic.jobs:
-            print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
         best_schedules_after_crossover=[]
-        Schedule(num_machines)
+        Schedule(num_machines,Genetic.jobs)
         population = Schedule.generate_random_schedules_and_encoding(Genetic.jobs)
         for i in range (MAX_GENERATIONS):
             if i==0:
@@ -50,7 +40,7 @@ class Genetic:
             
         Genetic.__calc_fitness(best_schedules_after_crossover)
         best_schedule_decoded=Schedule.assign_jobs_to_machines(best_schedules_after_crossover[0],Genetic.jobs)
-
+        
 
         return best_schedule_decoded
             
