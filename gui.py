@@ -1,5 +1,7 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
+from Backtracking import Backtracking
+from Genetic import Genetic
 
 jobs = []
 # start matplotlib code
@@ -36,7 +38,16 @@ def plot_timeline(jobs,title):
 def add_job():
     job_name = job_entry.get()
     duration = float(duration_entry.get())
-    machine = int(machine_entry.get())
+    machine = machine_entry.get()
+
+    if(machine != ""):
+        if(int(machine) >= int(machines_entry.get())):
+            machine = ""
+        else:
+            machine = int(machine)
+
+    else:
+        machine = ""
     prerequisites = prerequisites_entry.get()
     jobs.append({'name': job_name, 'duration': duration, 'machine': machine, 'prerequisites': prerequisites})
     update_job_list()
@@ -62,7 +73,10 @@ def show_backtracking_timeline():
     plot_timeline(jobs,"Backtracking Timeline")
 
 def show_genetic_timeline():
-    results = []
+    print (jobs)
+    Genetic(int(machines_entry.get()),int(capacity_entry.get()))
+    Genetic.jobs(jobs)
+    results = Genetic.run()
     plot_timeline(results,"Genetic Timeline")
 
 root = tk.Tk()

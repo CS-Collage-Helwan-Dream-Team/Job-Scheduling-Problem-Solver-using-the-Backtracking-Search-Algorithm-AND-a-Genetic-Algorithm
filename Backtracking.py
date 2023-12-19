@@ -7,15 +7,15 @@ from backtracking.backtracking_algorithm import BacktrackingAlgorithm
 class Backtracking:
     resources = [Resource]
     jobs = [Job]
-    def __init__(MACHINE_CAPACITY,NUM_MACHINES):
-        Backtracking.resources= Resource.generate_random_resources(NUM_MACHINES,MACHINE_CAPACITY)
+    def __init__(self,machines,capacity):
+        Backtracking.resources= Resource.generate_random_resources(machines,capacity)
     
-    def jobs(jobs):
+    def jobs(self,jobs):
         Backtracking.jobs=[]
         for job in jobs:
             Backtracking.jobs.append(Job(job['name'],job['duration'],dependency=job['prerequisites'],requiredResource_id=job['machine']))
     
-    def run():
+    def run(self):
         if(not Job.check_total_processing_time(Backtracking.jobs, Backtracking.resources)):
             print("Exceeded the total resource capacity")
 
@@ -42,7 +42,6 @@ class Backtracking:
 #     Job('4', 4),
 #     Job('5', 20, dependency='1'),
 # ]
-
 
 
 

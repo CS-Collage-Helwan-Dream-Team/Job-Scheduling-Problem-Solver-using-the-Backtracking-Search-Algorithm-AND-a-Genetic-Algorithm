@@ -3,21 +3,26 @@ from genetic.Schedule import Schedule
 from app.config import POPULATION_SIZE, MAX_GENERATIONS
 
 class Genetic:
-    MACHINE_CAPACITY,NUM_MACHINES = -1
+    MACHINE_CAPACITY,NUM_MACHINES = 0,0
     jobs = [Job]
-    def __init__(MACHINE_CAPACITY,NUM_MACHINES):
-        Genetic.MACHINE_CAPACITY=MACHINE_CAPACITY
-        Genetic.NUM_MACHINES=NUM_MACHINES
+    def __init__(self,machines,capacity):
+        Genetic.MACHINE_CAPACITY=capacity
+        Genetic.NUM_MACHINES=machines
 
     def jobs(jobs):
         Genetic.jobs=[]
         for job in jobs:
-            Genetic.jobs.append(Job(job['name'],job['duration'],job['prerequisites'],job['machine']))
+            Genetic.jobs.append(Job(job['name'],job['duration'],[job['prerequisites']] if job['prerequisites']!='' else [],job['machine']))
+
+
+    def print_jobs():
+        for job in Genetic.jobs:
+            print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
 
     def run():
-        Job.handle_split_dependencies(Genetic.jobs)
+        Job.handle_split_dependencies(Genetic.jobs,Genetic.MACHINE_CAPACITY)
         # print("################### New Jobs: #####################")
-        # for job in jobs:
+        # for job in Genetic.jobs:
         #     print(f"Job: {job.name}, Duration: {job.duration}, Prerequisites: {job.prerequisites}, Resources: {job.resources}")
         best_schedules_after_crossover=[]
         population = Schedule.generate_random_schedules_and_encoding(Genetic.jobs)
@@ -43,6 +48,7 @@ class Genetic:
             
         Genetic.__calc_fitness(best_schedules_after_crossover)
         best_schedule_decoded=Schedule.assign_jobs_to_machines(best_schedules_after_crossover[0],Genetic.jobs)
+
 
         return best_schedule_decoded
             
@@ -122,15 +128,25 @@ class Genetic:
 
 
 
-
-
-
-
-
     
     
 
-
+Genetic(2,30)
+jobss=[
+    {'name': '1', 'duration': 60, 'machine': 1, 'prerequisites': ''},
+    {'name': '2', 'duration': 50, 'machine': 1, 'prerequisites': '1'},
+    {'name': '3', 'duration': 3, 'machine': 1, 'prerequisites': '1'},
+    {'name': '4', 'duration': 5, 'machine': 1, 'prerequisites': ''},
+    {'name': '5', 'duration': 4, 'machine': 2, 'prerequisites': '2'},
+    {'name': '6', 'duration': 15, 'machine': 2, 'prerequisites': ''},
+    {'name': '7', 'duration': 23, 'machine': 2, 'prerequisites': ''},
+    {'name': '8', 'duration': 16, 'machine': 2, 'prerequisites': ''},
+    {'name': '9', 'duration': 1, 'machine': 2, 'prerequisites': ''},
+    {'name': '10', 'duration': 23, 'machine': 2, 'prerequisites': ''},
+    {'name': '11', 'duration': 60, 'machine': 2, 'prerequisites': '4'},
+    {'name': '12', 'duration': 7, 'machine': 2, 'prerequisites': ''},
+    {'name': '13', 'duration': 3, 'machine': 2, 'prerequisites': ''},
+]
 
 
 
