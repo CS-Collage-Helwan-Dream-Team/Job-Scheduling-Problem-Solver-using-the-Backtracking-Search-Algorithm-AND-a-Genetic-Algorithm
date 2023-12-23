@@ -4,7 +4,7 @@ Description: The Job Scheduling Problem (JSP) is a classic optimization challeng
 industries, where the goal is to efficiently assign a set of jobs to available resources while respecting constraints
 and optimizing a specific objective. The project aims to develop intelligent algorithms, specifically employing
 the Backtracking Search Algorithm and a Genetic Algorithm, to solve instances of the Job Scheduling Problem.
-
+![Screen](.idea/Screenshot 2023-12-20 002612.png)
 Problem Overview: In the Job Scheduling Problem, a set of jobs needs to be scheduled on available resources,
 considering constraints such as time, resource capacity, and dependencies between jobs. Each job has specific
 processing times and may require certain resources, and the objective is to find an optimal schedule that
