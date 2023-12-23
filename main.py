@@ -5,14 +5,38 @@ from Genetic import Genetic
 import numpy as np
 import time
 import random
-
+from tkinter import messagebox
 jobs = []
 results = []
 backtracking_execution_time=0.0
 genetic_algorithm_execution_time=0.0
+def validate(jobs):
+        # add validation if 
+    print(jobs)
+    total_jobs_time=0
 
+    for job in jobs:
+        total_jobs_time += int(job['duration'])
+    if(not capacity_entry.get() or not machines_entry.get()):
+        messagebox.showerror("Error","please add the capacity and the number of machines")
+        return False
+    if(total_jobs_time==0):
+        messagebox.showerror("Error","no jobs have been added")
+        return False
+    
+    if(total_jobs_time> int(machines_entry.get()) * int(capacity_entry.get())):
+        print(total_jobs_time)
+        print(int(machines_entry.get()) * int(capacity_entry.get()))
+        messagebox.showerror("Error","the total proccessing time of jobs exceeded the total capacity of resourses")
+        return False
+    
+    
+    
+    return True
 # start matplotlib code
 def plot_timeline(jobs,title):
+
+    
     fig, ax = plt.subplots()
 
     machines = {}
@@ -59,7 +83,13 @@ def add_job():
     job_name = job_entry.get()
     duration = float(duration_entry.get())
     machine = machine_entry.get()
-
+    if(not job_name.isdigit()):
+        messagebox.showerror("Error","job id must be number")
+        return
+    if(duration <= 0):
+        messagebox.showerror("Error","duration must be bigger 0")
+        return
+    
     if(machine != ""):
         if(int(machine) >= int(machines_entry.get())):
             machine = None
@@ -69,6 +99,14 @@ def add_job():
     else:
         machine = None
     prerequisites = prerequisites_entry.get()
+    if(prerequisites or machine):
+        if (duration > int(capacity_entry.get())):
+            messagebox.showerror("Error","Can't add prerequisite or machine for job has duration bigger than machine capacity")
+            return
+    if (duration > int(capacity_entry.get())):
+            messagebox.showerror("Warning","The time will be exceed the limit")
+            
+
     jobs.append({'name': job_name, 'duration': duration, 'machine': machine, 'prerequisites': prerequisites})
     update_job_list()
     job_entry.delete(0, tk.END)
@@ -145,6 +183,8 @@ def add_colors_to_jobs(jobs, results):
 
 Backtracking()
 def show_backtracking_timeline():
+    if(not validate(jobs)):
+        return
     Backtracking.add_resources(int(machines_entry.get()),int(capacity_entry.get()))
     
     #claculate execution time and memory space
@@ -159,6 +199,8 @@ def show_backtracking_timeline():
     plot_timeline(add_colors_to_jobs(jobs,results),f"Backtracking Timeline Execution Time: {backtracking_execution_time} s")
 Genetic()
 def show_genetic_timeline():
+    if(not validate(jobs)):
+        return
     Genetic.add_jobs(jobs)
     #claculate execution time and memory space
     start_time = time.time()

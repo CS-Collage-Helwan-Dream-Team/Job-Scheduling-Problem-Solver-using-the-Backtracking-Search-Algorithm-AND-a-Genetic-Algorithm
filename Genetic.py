@@ -27,7 +27,10 @@ class Genetic:
                 #select best schedules
                 best_schedules = population[:int(POPULATION_SIZE/2)]
                 #crossover
-                best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
+                if(len(Genetic.jobs)!=1):
+                    best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
+                else:
+                    best_schedules_after_crossover=best_schedules
             else:
                 #calculate fitness for each schedule
                 Genetic.__calc_fitness(best_schedules_after_crossover)
@@ -36,7 +39,10 @@ class Genetic:
                 #select best schedules
                 best_schedules = best_schedules_after_crossover[:int(POPULATION_SIZE/2)]
                 #crossover
-                best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
+                if(len(Genetic.jobs)!=1):
+                    best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
+                else:
+                    best_schedules_after_crossover=best_schedules
             
         Genetic.__calc_fitness(best_schedules_after_crossover)
         best_schedule_decoded=Schedule.assign_jobs_to_machines(best_schedules_after_crossover[0],Genetic.jobs)
@@ -52,94 +58,11 @@ class Genetic:
         full_schedules.sort(key=lambda x: x.fitness)
         
 
-    # # # Your existing code
-
-    # # jobs = [
-    # #     Job('1', 60,),
-    # #     Job('2', 50,['1']),
-    # #     Job('3', 3,['1']),
-    # #     Job('4', 5),
-    # #     Job('5', 4,[2], "1"),
-    # #     Job('6', 15),
-    # #     Job('7', 23),
-    # #     Job('8', 16),
-    # #     Job('9', 1),
-    # #     Job('10', 23),
-    # #     Job('11', 60,['4'],2),
-    # #     Job('12', 7),
-    # #     Job('13', 3),
-    # # ]
-
-    # max_time = MACHINE_CAPACITY * NUM_MACHINES
-    # total_job_time = Job.TOTAL_TIME
-    # if max_time < total_job_time:
-    #     print("Total time of jobs exceeded the available")
-
-    # Job.handle_split_dependencies(jobs)
-
-
-    # print("###################  #####################")
-
-
-    # best_schedules_after_crossove=[]
-    # population = Schedule.generate_random_schedules_and_encoding(jobs)
-    # for i in range (MAX_GENERATIONS):
-    #     if i==0:
-    #         #calculate fitness for each schedule
-    #         __calc_fitness(population)
-    #         #sort schedules by fitness
-    #         population.sort(key=lambda x: x.fitness)
-    #         #select best schedules
-    #         best_schedules = population[:int(POPULATION_SIZE/2)]
-    #         #crossover
-    #         best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
-    #     else:
-    #         #calculate fitness for each schedule
-    #         __calc_fitness(best_schedules_after_crossover)
-    #         #sort schedules by fitness
-    #         best_schedules_after_crossover.sort(key=lambda x: x.fitness)
-    #         #select best schedules
-    #         best_schedules = best_schedules_after_crossover[:int(POPULATION_SIZE/2)]
-    #         #crossover
-    #         best_schedules_after_crossover = Schedule.crossovers_mutations(best_schedules)
-        
-
-
-    # #print the best schedule after crossover
-    # print("################### Best Schedule: #####################")
-    # __calc_fitness(best_schedules_after_crossover)
-    # best_schedule=best_schedules_after_crossover[0]
-    # best_schedule_decoded=Schedule.assign_jobs_to_machines(best_schedules_after_crossover[0],jobs)
-
-    # print('fitness: ',best_schedule.fitness, 'schedule: ',best_schedule.encode)
-
-    # print("###################  #####################")
-    # for item in best_schedule_decoded:
-    #     print('Job: ',item['name'], 'Machine: ',item['machine_number'], 'Start Time: ',item['start_time'], 'End Time: ',item['end_time'])
-        
-
+  
 
 
     
     
-
-
-jobss=[
-    {'name': '1', 'duration': 60, 'machine': 1, 'prerequisites': ''},
-    {'name': '2', 'duration': 50, 'machine': 1, 'prerequisites': '1'},
-    {'name': '3', 'duration': 3, 'machine': 1, 'prerequisites': '1'},
-    {'name': '4', 'duration': 5, 'machine': 1, 'prerequisites': ''},
-    {'name': '5', 'duration': 4, 'machine': 2, 'prerequisites': '2'},
-    {'name': '6', 'duration': 15, 'machine': 2, 'prerequisites': ''},
-    {'name': '7', 'duration': 23, 'machine': 2, 'prerequisites': ''},
-    {'name': '8', 'duration': 16, 'machine': 2, 'prerequisites': ''},
-    {'name': '9', 'duration': 1, 'machine': 2, 'prerequisites': ''},
-    {'name': '10', 'duration': 23, 'machine': 2, 'prerequisites': ''},
-    {'name': '11', 'duration': 60, 'machine': 2, 'prerequisites': '4'},
-    {'name': '12', 'duration': 7, 'machine': 2, 'prerequisites': ''},
-    {'name': '13', 'duration': 3, 'machine': 2, 'prerequisites': ''},
-]
-
 
 
 
